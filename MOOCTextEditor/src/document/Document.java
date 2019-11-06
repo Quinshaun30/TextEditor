@@ -68,7 +68,32 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 2) and 
 	    // EfficientDocument (module 3).
-	    return 0;
+		int num = 0;
+
+		String pattern = "[aeiouyAEIOUY]+";
+
+		Pattern tokSplitter = Pattern.compile(pattern);
+
+		Matcher m = tokSplitter.matcher(word);
+
+		String lastToken = "";
+
+		while (m.find()) {
+
+		num++;
+
+		lastToken = m.group();
+
+		}
+
+		if(num > 1 && word.charAt(word.length()-1) == 'e' && lastToken.equals("e")) {
+
+		num--;
+
+		}
+
+		return num;
+	    
 	}
 	
 	/** A method for testing
@@ -131,9 +156,20 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: You will play with this method in week 1, and 
+		double words = (double)getNumWords();
+
+		double sentences = (double)getNumSentences();
+
+		double syllables = (double)getNumSyllables();
+
+		double fleschScore = 206.835 - 1.015*(words/sentences) - 84.6*(syllables/words);
+
+		double finalValue = Math.round(fleschScore*100.0)/100.0;
+
+		return finalValue;
+		// TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-	    return text.length();
+	   
 	}
 	
 	
