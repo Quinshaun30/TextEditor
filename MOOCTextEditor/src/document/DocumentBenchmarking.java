@@ -59,7 +59,7 @@ public class DocumentBenchmarking {
 			 *      (on the same line as the first print statement) followed by a newline (\n) 
 			 */  
 	System.out.print(numToCheck + "\t\t");
-			
+	
 			String text = getStringFromFile(textfile, numToCheck);
 			
 			long basicStartTime = System.nanoTime();

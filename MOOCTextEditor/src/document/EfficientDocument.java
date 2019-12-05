@@ -134,7 +134,8 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSyllables() {
         //TODO: write this method.  Hint: It's simple
-        return numSyllables;
+        
+		return numSyllables;
 	}
 	
 	// Can be used for testing
