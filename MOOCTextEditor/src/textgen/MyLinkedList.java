@@ -17,6 +17,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
 		// TODO: Implement this method
+		size = 0;
+		head = new LLNode<E>(null);
+		tail = new LLNode<E>(null);
+		head.next = tail;
+		tail.prev = head;
 	}
 
 	/**
@@ -24,9 +29,19 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @param element The element to add
 	 */
 	public boolean add(E element ) 
-	{
+	
 		// TODO: Implement this method
-		return false;
+		{
+			if (element == null) {
+				throw new NullPointerException();
+			}
+	        LLNode<E> n = new LLNode<E>(element);
+	        tail.prev.next = n;
+	        n.prev = tail.prev;
+	        n.next = tail;
+	        tail.prev = n;
+	        size++;
+		return true;
 	}
 
 	/** Get the element at position index 
@@ -34,7 +49,14 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E get(int index) 
 	{
 		// TODO: Implement this method.
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		LLNode<E> n = head;
+		for (int i = 0; i <= index; i++) {
+			n = n.next;
+		}
+		return n.data;
 	}
 
 	/**
@@ -45,6 +67,23 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public void add(int index, E element ) 
 	{
 		// TODO: Implement this method
+		if (element == null) {
+			throw new NullPointerException();
+		}
+		if ((index < 0 || index >= size)&& size != 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		LLNode<E> prev = head;
+		for (int i = 0; i < index; i++) {
+			prev = prev.next;
+		}
+		LLNode<E> node = new LLNode<E>(element);
+	
+		node.next = prev.next;
+		prev.next = node;
+		node.next.prev = node;
+		node.prev = prev;
+		size++;
 	}
 
 
@@ -52,7 +91,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public int size() 
 	{
 		// TODO: Implement this method
-		return -1;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -64,7 +103,17 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E remove(int index) 
 	{
 		// TODO: Implement this method
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		LLNode<E> n = head;
+		for (int i = 0; i <= index; i++) {
+			n = n.next;
+		}
+		n.prev.next = n.next;
+		n.next.prev = n.prev;
+		size--;
+		return n.data;
 	}
 
 	/**
@@ -77,7 +126,18 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E set(int index, E element) 
 	{
 		// TODO: Implement this method
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (element == null) {
+			throw new NullPointerException();
+		}
+		LLNode<E> n = head;
+		for (int i = 0; i <= index; i++) {
+			n = n.next;
+		}
+		n.data = element;
+		return element;
 	}   
 }
 
@@ -89,7 +149,12 @@ class LLNode<E>
 
 	// TODO: Add any other methods you think are useful here
 	// E.g. you might want to add another constructor
-
+	public LLNode()
+	{
+		this.data = null;
+		this.prev = null;
+		this.next = null;
+	}
 	public LLNode(E e) 
 	{
 		this.data = e;
