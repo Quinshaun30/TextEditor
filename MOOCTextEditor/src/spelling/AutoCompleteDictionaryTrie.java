@@ -40,6 +40,24 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
+		word = word.toLowerCase();
+		TrieNode node = root;
+		for( int i=0; i<word.length(); i++) {
+			char current = word.charAt(i);
+			if (node.getValidNextCharacters().contains(current))
+			{
+				node = node.getChild(current);
+						}
+			else {
+				node = node.insert(current);
+				
+			}
+		}
+		if(!node.endsWord()) {
+			node.setEndsWord(true);
+			size++;
+			return true;
+		}
 	    return false;
 	}
 	
@@ -50,7 +68,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -60,7 +78,26 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
+		String word;
+		word = s.toLowerCase();
+		TrieNode node = root;
+		for( int i=0; i<word.length(); i++) {
+			char current = word.charAt(i);
+			if (node.getValidNextCharacters().contains(current))
+			{
+				node = node.getChild(current);
+						}
+			else {
+				return false;
+				
+			}
+		}
+		if(node.endsWord()) {
+			
+			return true;
+		}
 		return false;
+		
 	}
 
 	/** 
@@ -100,10 +137,38 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
-    	 
-         return null;
-     }
-
+    	 TrieNode current = root;
+  		TrieNode next;
+  		List<String> returnlist = new LinkedList<String>();
+  		for (Character c : prefix.toCharArray())
+  		{
+  			next = current.getChild(c);
+  			if (next == null)
+  			{
+  				return returnlist;
+  			}
+  			current = next;
+  		}
+  		LinkedList<TrieNode> queue = new LinkedList<TrieNode>();
+ 		queue.add(current);
+ 		while(numCompletions >0 && !queue.isEmpty()) {
+ 			
+ 			next = queue.removeFirst();
+ 			if (next.endsWord()) {
+ 				returnlist.add(next.getText());
+ 				numCompletions = numCompletions-1;
+ 			}
+ 			for (Character cnext : next.getValidNextCharacters()) 
+ 			{
+ 				queue.add(next.getChild(cnext));
+ 			}
+ 		}
+ 	
+     	 
+          return returnlist;
+      }
+         
+     
  	// For debugging
  	public void printTree()
  	{
